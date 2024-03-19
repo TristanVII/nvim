@@ -6,9 +6,10 @@ vim.g.have_nerd_font = true
 
 -- custome
 
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 vim.keymap.set('n', '<leader>b', vim.cmd.Ex)
 vim.keymap.set('n', '<Enter>', 'o')
-
 vim.keymap.set('n', '<C-j>', '<C-d>zz')
 vim.keymap.set('n', '<C-k>', '<C-u>zz')
 vim.keymap.set('n', '<C-l>', '$')
@@ -17,6 +18,12 @@ vim.keymap.set('n', '<S-j>', '}')
 vim.keymap.set('n', '<S-k>', '{')
 vim.keymap.set('n', '<S-l>', 'e')
 vim.keymap.set('n', '<S-h>', 'b')
+vim.keymap.set('v', '<S-h>', 'b')
+vim.keymap.set('v', '<S-l>', 'e')
+
+-- move lines up and down
+vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv")
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -71,6 +78,9 @@ vim.opt.inccommand = 'split'
 -- Show which line your cursor is on
 vim.opt.cursorline = true
 
+vim.opt.termguicolors = true
+
+vim.opt.guicursor = ''
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
@@ -97,10 +107,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
--- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
--- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
--- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
--- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<leader>h', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<leader>l', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<leader>j', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<leader>k', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
