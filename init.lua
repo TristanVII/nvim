@@ -1,7 +1,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Set to true if you have a Nerd Font installed
 vim.g.have_nerd_font = true
 
 -- custome
@@ -20,6 +19,10 @@ vim.keymap.set('n', '<S-l>', 'e')
 vim.keymap.set('n', '<S-h>', 'b')
 vim.keymap.set('v', '<S-h>', 'b')
 vim.keymap.set('v', '<S-l>', 'e')
+vim.keymap.set('n', 't', '<cmd>NvimTreeToggle<cr>')
+vim.keymap.set('v', '<S-j>', '}')
+vim.keymap.set('v', '<S-k>', '{')
+vim.keymap.set('n', '<S-t>', '<cmd>:ToggleTerm size=10 direction=float name=main<cr>')
 
 -- move lines up and down
 vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv")
@@ -90,6 +93,7 @@ vim.opt.scrolloff = 10
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.opt.background = 'dark'
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -161,6 +165,10 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'nvim-tree/nvim-tree.lua',
+    opts = {},
+  },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
@@ -178,6 +186,10 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
+  },
+  {
+    'm4xshen/autoclose.nvim',
+    opts = {},
   },
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
@@ -597,7 +609,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<Tab>'] = cmp.mapping.confirm { select = true },
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -636,11 +648,16 @@ require('lazy').setup({
   },
 
   {
-    'rose-pine/neovim',
+    'catppuccin/nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'rose-pine'
+      vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
+  },
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    opts = {},
   },
 
   -- Highlight todo, notes, etc in comments
