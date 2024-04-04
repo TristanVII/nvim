@@ -23,7 +23,10 @@ vim.keymap.set('n', 't', '<cmd>NvimTreeToggle<cr>')
 vim.keymap.set('v', '<S-j>', '}')
 vim.keymap.set('v', '<S-k>', '{')
 vim.keymap.set('n', '<S-t>', '<cmd>:ToggleTerm size=10 direction=float name=main<cr>')
+vim.keymap.set('n', '<leader>v', '<cmd>:vsplit<cr>')
 
+-- Delete buffer
+vim.keymap.set('n', '<leader>x', '<cmd>:bd<cr>')
 -- move lines up and down
 vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv")
@@ -36,6 +39,7 @@ vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv")
 -- Make line numbers default
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.wrap = false
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -571,7 +575,6 @@ require('lazy').setup({
         },
       },
       'saadparwaiz1/cmp_luasnip',
-
       -- Adds other completion capabilities.
       --  nvim-cmp does not ship with all sources by default. They are split
       --  into multiple repos for maintenance purposes.
@@ -646,14 +649,26 @@ require('lazy').setup({
       }
     end,
   },
-
   {
-    'catppuccin/nvim',
-    priority = 1000,
+    'projekt0n/github-nvim-theme',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      vim.cmd.colorscheme 'catppuccin-macchiato'
+      require('github-theme').setup {
+        -- ...
+      }
+
+      vim.cmd 'colorscheme github_dark_dimmed'
     end,
   },
+
+  -- {
+  --   'tanvirtin/monokai.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'monokai'
+  --   end,
+  -- },
   {
     'akinsho/toggleterm.nvim',
     version = '*',
