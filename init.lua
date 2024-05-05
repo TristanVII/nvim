@@ -25,6 +25,9 @@ vim.keymap.set('v', '<S-k>', '{')
 vim.keymap.set('n', '<S-t>', '<cmd>:ToggleTerm size=10 direction=float name=main<cr>')
 vim.keymap.set('n', '<leader>v', '<cmd>:vsplit<cr>')
 
+vim.keymap.set('n', '<C-f>', ':SearchBoxIncSearch<CR>')
+vim.keymap.set('n', '<leader>fr', ':SearchBoxReplace<CR>')
+
 -- Delete buffer
 vim.keymap.set('n', '<leader>x', '<cmd>:bd<cr>')
 -- move lines up and down
@@ -157,6 +160,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  { 'tpope/vim-fugitive', opt = {} },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -169,9 +173,83 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+
   {
     'nvim-tree/nvim-tree.lua',
-    opts = {},
+    opts = {
+      filters = {
+        dotfiles = false,
+      },
+      disable_netrw = true,
+      hijack_netrw = true,
+      hijack_cursor = true,
+      hijack_unnamed_buffer_when_opening = false,
+      sync_root_with_cwd = true,
+      update_focused_file = {
+        enable = true,
+        update_root = false,
+      },
+      view = {
+        adaptive_size = false,
+        side = 'left',
+        width = 30,
+        preserve_window_proportions = true,
+      },
+      git = {
+        enable = true,
+        ignore = true,
+      },
+      filesystem_watchers = {
+        enable = true,
+      },
+      actions = {
+        open_file = {
+          resize_window = true,
+        },
+      },
+      renderer = {
+        root_folder_label = false,
+        highlight_git = true,
+        highlight_opened_files = 'none',
+
+        indent_markers = {
+          enable = true,
+        },
+
+        icons = {
+          show = {
+            file = true,
+            folder = true,
+            folder_arrow = true,
+            git = true,
+          },
+
+          glyphs = {
+            default = '󰈚',
+            symlink = '',
+            folder = {
+              default = '',
+              empty = '',
+              empty_open = '',
+              open = '',
+              symlink = '',
+              symlink_open = '',
+              arrow_open = '',
+              arrow_closed = '',
+            },
+            git = {
+              unstaged = '✗',
+              staged = '✓',
+              unmerged = '',
+              renamed = '➜',
+              untracked = '★',
+              deleted = '',
+              ignored = '◌',
+            },
+          },
+        },
+      },
+    },
   },
 
   -- Here is a more advanced example where we pass configuration
@@ -179,21 +257,56 @@ require('lazy').setup({
   --    require('gitsigns').setup({ ... })
   --
   -- See `:help gitsigns` to understand what the configuration keys do
+  {
+    'm4xshen/autoclose.nvim',
+    opts = {},
+  },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
         add = { text = '+' },
         change = { text = '~' },
-        delete = { text = '_' },
+        delete = { text = '󰍵' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
+        untracked = { text = '│' },
       },
+
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
+
+        local function opts(desc)
+          return { buffer = bufnr, desc = desc }
+        end
+
+        local map = vim.keymap.set
+
+        -- Navigation
+        map('n', ']c', function()
+          if vim.wo.diff then
+            vim.cmd.normal { ']c', bang = true }
+          else
+            gs.nav_hunk 'next'
+          end
+        end)
+
+        map('n', '[c', function()
+          if vim.wo.diff then
+            vim.cmd.normal { '[c', bang = true }
+          else
+            gs.nav_hunk 'prev'
+          end
+        end)
+
+        map('n', '<leader>rh', gs.reset_hunk, opts 'Reset Hunk')
+        map('n', '<leader>ph', gs.preview_hunk, opts 'Preview Hunk')
+        map('n', '<leader>gb', gs.blame_line, opts 'Blame Line')
+        map('n', '<leader>hD', function()
+          gs.diffthis '~'
+        end)
+      end,
     },
-  },
-  {
-    'm4xshen/autoclose.nvim',
-    opts = {},
   },
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
@@ -677,6 +790,7 @@ require('lazy').setup({
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  { 'VonHeikemen/searchbox.nvim', dependencies = 'MunifTanjim/nui.nvim' },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
