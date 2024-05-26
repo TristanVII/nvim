@@ -4,6 +4,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- custome
+--
 
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
@@ -43,6 +44,10 @@ vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv")
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.wrap = false
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.undofile = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -261,6 +266,14 @@ require('lazy').setup({
     'm4xshen/autoclose.nvim',
     opts = {},
   },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup()
+    end,
+  },
+
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -633,31 +646,31 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        return {
-          timeout_ms = 500,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-        }
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = function(bufnr)
+  --       -- Disable "format_on_save lsp_fallback" for languages that don't
+  --       -- have a well standardized coding style. You can add additional
+  --       -- languages here or re-enable it for the disabled ones.
+  --       local disable_filetypes = { c = true, cpp = true }
+  --       return {
+  --         timeout_ms = 500,
+  --         lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+  --       }
+  --     end,
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use a sub-list to tell conform to run *until* a formatter
+  --       -- is found.
+  --       -- javascript = { { "prettierd", "prettier" } },
+  --     },
+  --   },
+  -- },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -763,23 +776,29 @@ require('lazy').setup({
     end,
   },
   {
-    'projekt0n/github-nvim-theme',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
+    'rose-pine/neovim',
+    name = 'rose-pine',
     config = function()
-      require('github-theme').setup {
-        -- ...
+      require('rose-pine').setup {
+        styles = {
+          italic = false,
+        },
       }
 
-      vim.cmd 'colorscheme github_dark_dimmed'
+      vim.cmd 'colorscheme rose-pine'
+      vim.cmd.colorscheme 'rose-pine'
     end,
   },
-
   -- {
-  --   'tanvirtin/monokai.nvim',
-  --   priority = 1000,
+  --   'projekt0n/github-nvim-theme',
+  --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
+  --   priority = 1000, -- make sure to load this before all the other start plugins
   --   config = function()
-  --     vim.cmd.colorscheme 'monokai'
+  --     require('github-theme').setup {
+  --       -- ...
+  --     }
+  --
+  --     vim.cmd 'colorscheme github_dark_dimmed'
   --   end,
   -- },
   {
@@ -791,6 +810,13 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   { 'VonHeikemen/searchbox.nvim', dependencies = 'MunifTanjim/nui.nvim' },
+  {
+    'sbdchd/neoformat',
+    config = function()
+      vim.g.neoformat_try_node_exe = 1
+      vim.g.neoformat_only_msg_on_error = 1
+    end,
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
