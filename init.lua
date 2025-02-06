@@ -774,21 +774,88 @@ require('lazy').setup({
         },
       }
     end,
-  },
-  {
-    'rose-pine/neovim',
-    name = 'rose-pine',
-    config = function()
-      require('rose-pine').setup {
-        styles = {
-          italic = false,
-        },
-      }
+  },{
+  'rose-pine/neovim',
+  name = 'rose-pine',
+  config = function()
+    require('rose-pine').setup {
+    variant = "moon", -- auto, main, moon, or dawn
+    dark_variant = "main", -- main, moon, or dawn
+    dim_inactive_windows = false,
+    extend_background_behind_borders = true,
 
-      vim.cmd 'colorscheme rose-pine'
-      vim.cmd.colorscheme 'rose-pine'
+    enable = {
+        terminal = true,
+        migrations = false,
+    },
+
+    styles = {
+        bold = false,
+        italic = false,
+        transparency = false,
+    },
+
+    groups = {
+        border = "muted",
+        link = "iris",
+        panel = "surface",
+
+        error = "love",
+        hint = "iris",
+        info = "foam",
+        note = "pine",
+        todo = "rose",
+        warn = "gold",
+
+        git_add = "foam",
+        git_change = "rose",
+        git_delete = "love",
+        git_dirty = "rose",
+        git_ignore = "muted",
+        git_merge = "iris",
+        git_rename = "pine",
+        git_stage = "iris",
+        git_text = "rose",
+        git_untracked = "subtle",
+
+        h1 = "iris",
+        h2 = "foam",
+        h3 = "rose",
+        h4 = "gold",
+        h5 = "pine",
+        h6 = "foam",
+    },
+
+    palette = {
+        -- Override the builtin palette per variant
+        moon = {
+         base = '#282c34', -- Set background color to #282c34
+          overlay = '#363738',
+        },
+    },
+
+    highlight_groups = {
+        CursorLine = { bg = '#282c34' }, -- For cursor line
+        Cursor = { bg = '#282c34' },     -- For cursor background
+    },
+
+    before_highlight = function(group, highlight, palette)
+        -- Disable all undercurls
+        -- if highlight.undercurl then
+        --     highlight.undercurl = false
+        -- end
+        --
+        -- Change palette colour
+        -- if highlight.fg == palette.pine then
+        --     highlight.fg = palette.foam
+        -- end
     end,
-  },
+}
+
+    vim.cmd 'colorscheme rose-pine'
+    vim.cmd.colorscheme 'rose-pine'
+  end,
+},
   -- {
   --   'projekt0n/github-nvim-theme',
   --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -865,7 +932,6 @@ require('lazy').setup({
       local helpful_prompt = 'You are a helpful assistant. What I have sent are my notes so far.'
       local dingllm = require 'dingllm'
 
-
       local function handle_open_router_spec_data(data_stream)
         local success, json = pcall(vim.json.decode, data_stream)
         if success then
@@ -876,7 +942,7 @@ require('lazy').setup({
             end
           end
         else
-          print("non json " .. data_stream)
+          print('non json ' .. data_stream)
         end
       end
 
@@ -897,7 +963,6 @@ require('lazy').setup({
         table.insert(args, url)
         return args
       end
-
 
       -- local function llama_405b_base()
       --   dingllm.invoke_llm_and_stream_into_editor({
@@ -980,7 +1045,7 @@ require('lazy').setup({
 
       local function DS_help()
         dingllm.invoke_llm_and_stream_into_editor({
-          url = 'https://api.openai.com/v1/chat/completions',
+          url = 'https://api.deepseek.com/chat/completions',
           model = 'deepseek-chat',
           api_key_name = 'DEEPSEEK_API_KEY',
           system_prompt = helpful_prompt,
