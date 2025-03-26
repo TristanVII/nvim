@@ -104,6 +104,29 @@ if vim.g.vscode then
       vim.keymap.set('n', '<leader>sf', function()
           vim.fn.VSCodeNotify('workbench.action.quickOpen')
       end)
+      
+          -- Show hover diagnostic
+    vim.keymap.set('n', '<leader>e', function()
+      vim.fn.VSCodeNotify('editor.action.showHover')
+  end)
+
+          -- Show hover diagnostic
+    vim.keymap.set('n', 'gr', function()
+      vim.fn.VSCodeNotify('editor.action.goToReferences')
+  end)
+
+  -- Open command palette
+  vim.keymap.set('n', '<leader>p', function()
+      vim.fn.VSCodeNotify('workbench.action.showCommands')
+  end)
+  
+  vim.keymap.set('n', 'T', function()
+    vim.fn.VSCodeNotify('workbench.action.terminal.toggleTerminal')
+end)
+
+vim.keymap.set('n', '<leader>gb', function()
+  vim.fn.VSCodeNotify('gitlens.toggleLineBlame')
+end)
 else
 
 -- HERE MOVE
