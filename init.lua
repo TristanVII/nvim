@@ -3,11 +3,7 @@ vim.g.maplocalleader = ' '
 
 vim.g.have_nerd_font = true
 
--- custome
---
 
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
 vim.keymap.set('n', '<leader>b', vim.cmd.Ex)
 vim.keymap.set('n', '<Enter>', 'o')
 vim.keymap.set('n', '<C-j>', '<C-d>zz')
@@ -20,14 +16,10 @@ vim.keymap.set('n', '<S-l>', 'e')
 vim.keymap.set('n', '<S-h>', 'b')
 vim.keymap.set('v', '<S-h>', 'b')
 vim.keymap.set('v', '<S-l>', 'e')
-vim.keymap.set('n', 't', '<cmd>NvimTreeToggle<cr>')
 vim.keymap.set('v', '<S-j>', '}')
 vim.keymap.set('v', '<S-k>', '{')
-vim.keymap.set('n', '<S-t>', '<cmd>:ToggleTerm size=10 direction=float name=main<cr>')
-vim.keymap.set('n', '<leader>v', '<cmd>:vsplit<cr>')
 
-vim.keymap.set('n', '<C-f>', ':SearchBoxIncSearch<CR>')
-vim.keymap.set('n', '<leader>fr', ':SearchBoxReplace<CR>')
+
 
 -- Delete buffer
 vim.keymap.set('n', '<leader>x', '<cmd>:bd<cr>')
@@ -41,6 +33,89 @@ vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv")
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+-- Diagnostic keymaps
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+vim.keymap.set('n', '<leader>h', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<leader>l', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<leader>j', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<leader>k', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- [[ Basic Autocommands ]]
+--  See `:help lua-guide-autocommands`
+
+-- Highlight when yanking (copying) text
+--  Try it with `yap` in normal mode
+--  See `:help vim.highlight.on_yank()`
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when anking (copying) text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
+
+
+if vim.g.vscode then
+    -- VSCode extension
+    -- Split window vertically
+    vim.keymap.set('n', '<leader>v', function()
+        vim.fn.VSCodeNotify('workbench.action.splitEditorRight')
+    end)
+
+    -- Navigation between splits
+    vim.keymap.set('n', '<leader>h', function()
+        vim.fn.VSCodeNotify('workbench.action.focusLeftGroup')
+    end)
+    vim.keymap.set('n', '<leader>l', function()
+        vim.fn.VSCodeNotify('workbench.action.focusRightGroup')
+    end)
+
+    -- Toggle file explorer (sidebar)
+    vim.keymap.set('n', '<leader>e', function()
+        vim.fn.VSCodeNotify('workbench.view.explorer')
+    end)
+
+    -- Toggle Source Control (git)
+    vim.keymap.set('n', '<leader>g', function()
+        vim.fn.VSCodeNotify('workbench.view.scm')
+    end)
+
+    -- Always show the minimap (right cursor tab)
+    vim.keymap.set('n', '<leader>m', function()
+        vim.fn.VSCodeNotify('editor.action.toggleMinimap')
+    end)
+    
+        -- Toggle primary sidebar (file explorer)
+        vim.keymap.set('n', 't', function()
+          vim.fn.VSCodeNotify('workbench.action.toggleSidebarVisibility')
+      end)
+  
+      -- Project-wide word search
+      vim.keymap.set('n', '<leader>sg', function()
+          vim.fn.VSCodeNotify('workbench.action.findInFiles')
+      end)
+  
+      -- File search
+      vim.keymap.set('n', '<leader>sf', function()
+          vim.fn.VSCodeNotify('workbench.action.quickOpen')
+      end)
+else
+
+-- HERE MOVE
+vim.keymap.set('n', '<S-t>', '<cmd>:ToggleTerm size=10 direction=float name=main<cr>')
+vim.keymap.set('n', '<leader>v', '<cmd>:vsplit<cr>')
+vim.keymap.set('n', 't', '<cmd>NvimTreeToggle<cr>')
+vim.keymap.set('n', '<C-f>', ':SearchBoxIncSearch<CR>')
+vim.keymap.set('n', '<leader>fr', ':SearchBoxReplace<CR>')
+
+
+vim.opt.background = 'dark'
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.wrap = false
@@ -104,43 +179,6 @@ vim.opt.scrolloff = 10
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-vim.opt.background = 'dark'
-
--- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<leader>h', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<leader>l', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<leader>j', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<leader>k', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
-
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-})
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -1137,3 +1175,15 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+
+
+end
+-- custome
+--
+
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
+-- 
+
+
