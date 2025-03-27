@@ -127,6 +127,18 @@ end)
 vim.keymap.set('n', '<leader>gb', function()
   vim.fn.VSCodeNotify('gitlens.toggleLineBlame')
 end)
+
+vim.keymap.set('n', '<leader>rh', function()
+  vim.fn.VSCodeNotify('git.revertSelectedRanges')
+end)
+
+vim.keymap.set('n', ']c', function()
+  vim.fn.VSCodeNotify('workbench.action.editor.nextChange')
+end)
+
+vim.keymap.set('n', '[c', function()
+  vim.fn.VSCodeNotify('workbench.action.editor.previousChange')
+end)
 else
 
 -- HERE MOVE
