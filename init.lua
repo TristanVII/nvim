@@ -60,6 +60,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
+vim.opt.clipboard = 'unnamedplus'
+vim.opt.relativenumber = true
+-- Show which line your cursor is on
+vim.opt.cursorline = true
+  -- Minimal number of screen lines to keep above and below the cursor.
+vim.opt.scrolloff = 10
+
 if vim.g.vscode then
     -- VSCode extension
     -- Split window vertically
@@ -139,6 +146,38 @@ end)
 vim.keymap.set('n', '[c', function()
   vim.fn.VSCodeNotify('workbench.action.editor.previousChange')
 end)
+
+-- GIT SCRIPT TO SHOW LOG AT LINES IN VSCODE TERMINAL BELOW
+vim.keymap.set("v", "<leader>gl", function()
+  local start_line = vim.fn.line("v")
+  local end_line = vim.fn.line(".")
+  local file_path = vim.fn.expand("%:p")
+
+  local cmd = string.format(
+    'git log --pretty="tformat: %%n%%Cred%%h%%Creset %%Cgreen%%s%%Creset" -L%d,%d:%s',
+    math.min(start_line, end_line),
+    math.max(start_line, end_line),
+    file_path
+  )
+
+  vim.fn.VSCodeNotify("workbench.action.terminal.sendSequence", { text = cmd .. "\n" })
+end)
+
+-- Normal mode: Git log around current line
+vim.keymap.set("n", "<leader>gl", function()
+  local current_line = vim.fn.line(".")
+  local file_path = vim.fn.expand("%:p")
+
+  local cmd = string.format(
+    'git log --pretty="tformat: %%n%%Cred%%h%%Creset %%Cgreen%%s%%Creset" -L%d,%d:%s',
+    math.max(1, current_line - 1),
+    current_line + 1,
+    file_path
+  )
+
+  vim.fn.VSCodeNotify("workbench.action.terminal.sendSequence", { text = cmd .. "\n" })
+end)
+
 else
 
 -- HERE MOVE
@@ -152,7 +191,6 @@ vim.keymap.set('n', '<leader>fr', ':SearchBoxReplace<CR>')
 vim.opt.background = 'dark'
 
 vim.opt.number = true
-vim.opt.relativenumber = true
 vim.opt.wrap = false
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -165,7 +203,6 @@ vim.opt.mouse = 'a'
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
 
-vim.opt.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -200,14 +237,10 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
 
--- Show which line your cursor is on
-vim.opt.cursorline = true
 
 vim.opt.termguicolors = true
 
 vim.opt.guicursor = ''
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
