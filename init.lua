@@ -895,11 +895,11 @@ require('lazy').setup({
         migrations = false,
     },
 
-    styles = {
-        bold = false,
-        italic = false,
-        transparency = false,
-    },
+     styles = {
+         bold = false,
+         italic = false,
+         transparency = true,
+     },
 
     groups = {
         border = "muted",
@@ -932,18 +932,18 @@ require('lazy').setup({
         h6 = "foam",
     },
 
-    palette = {
-        -- Override the builtin palette per variant
-        moon = {
-         base = '#282c34', -- Set background color to #282c34
-          overlay = '#363738',
-        },
-    },
-
-    highlight_groups = {
-        CursorLine = { bg = '#282c34' }, -- For cursor line
-        Cursor = { bg = '#282c34' },     -- For cursor background
-    },
+     palette = {
+         -- Override the builtin palette per variant
+         moon = {
+         base = '#171717', -- Match Ghostty background color
+           overlay = '#363738',
+         },
+     },
+ 
+     highlight_groups = {
+         CursorLine = { bg = '#171717' }, -- For cursor line
+         Cursor = { bg = '#171717' },     -- For cursor background
+     },
 
     before_highlight = function(group, highlight, palette)
         -- Disable all undercurls
@@ -1253,5 +1253,4 @@ end
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
 -- 
-
 
